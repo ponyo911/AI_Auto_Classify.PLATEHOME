@@ -3,12 +3,18 @@ from typing import Optional
 import bcrypt
 import re
 import os
+from category import validate_gpt_result
+from datetime import datetime
 from openai import OpenAI
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from database import get_db_connection
 from models import CartItem, CartUpdate, OrderItem, OrderCreate, UserSignup, UserLogin, OrderStatusUpdate
+from fastapi import File, UploadFile
+import base64
+import shutil
+
 
 app = FastAPI()
 
@@ -54,6 +60,7 @@ def get_all_data(): return db_data
 
 @app.get("/api/products")
 def get_all_products():
+    # JSON 상품 (기존)
     section_map = {
         "featured": "featured",
         "newItems": "new",
@@ -62,7 +69,7 @@ def get_all_products():
         "plate": "plate",
         "tableware": "tableware",
     }
-    all_products = []
+    json_products = []
     for section_key, category in section_map.items():
         items = db_data.get("sections", {}).get(section_key, [])
         for index, item in enumerate(items, start=1):
@@ -70,30 +77,89 @@ def get_all_products():
             safe_name = re.sub(r'\[[^\]]*\]', '', product.get('name', ''))
             safe_name = re.sub(r'[^a-z0-9가-힣]+', '-', safe_name.lower()).strip('-')[:30]
             product['id'] = f"{category}-{index}-{safe_name}"
-            all_products.append(product)
-    return all_products
+            product['source'] = 'json'
+            json_products.append(product)
+
+    # DB 상품 (관리자 등록)
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT * FROM products ORDER BY registered_at DESC")
+            db_rows = cursor.fetchall()
+    finally:
+        conn.close()
+
+    db_products = []
+    for r in db_rows:
+        db_products.append({
+            "id": r["id"],
+            "name": r["name"],
+            "price": r["price"],
+            "oldPrice": r.get("old_price") or r["price"],
+            "discount": r.get("discount", 0),
+            "badge": r.get("badge", "NEW"),
+            "category": r["category"],
+            "image": r.get("image", ""),
+            "registered_at": str(r.get("registered_at", "")),
+            "source": "db",
+        })
+
+    return json_products + db_products
 
 @app.post("/api/products")
 def add_product(new_product: dict):
     category = new_product.get("category", "featured")
-    section_map = {
-        "featured": "featured",
-        "new": "newItems",
-        "collection": "collection",
-        "mug": "mug",
-        "plate": "plate",
-        "tableware": "tableware",
-    }
-    section_key = section_map.get(category, "featured")
-    section_items = db_data.get("sections", {}).get(section_key, [])
-    new_id = f"{category}-{len(section_items) + 1}-{new_product.get('name', '')[:10].lower().replace(' ', '-')}"
+    name = new_product.get("name", "")
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            # 같은 카테고리 내 기존 개수로 ID 생성
+            cursor.execute(
+                "SELECT COUNT(*) as cnt FROM products WHERE category = %s", (category,)
+            )
+            count = cursor.fetchone()["cnt"]
+            safe_name = re.sub(r'\[[^\]]*\]', '', name)
+            safe_name = re.sub(r'[^a-z0-9가-힣]+', '-', safe_name.lower()).strip('-')[:30]
+            new_id = f"{category}-{count + 1}-{safe_name}"
+
+            cursor.execute(
+                """INSERT INTO products
+                   (id, name, price, old_price, discount, badge, category, image, registered_at)
+                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+                (
+                    new_id,
+                    name,
+                    int(new_product.get("price", 0)),
+                    int(new_product.get("oldPrice", new_product.get("price", 0))),
+                    int(new_product.get("discount", 0)),
+                    new_product.get("badge", "NEW"),
+                    category,
+                    new_product.get("image", ""),
+                    datetime.now().isoformat(),
+                )
+            )
+            conn.commit()
+    finally:
+        conn.close()
+
     new_product["id"] = new_id
-    section_items.append(new_product)
-    save_data()
     return {"message": "상품 등록 성공", "product": new_product}
 
 @app.delete("/api/products/{product_id}")
 def delete_product(product_id: str):
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("DELETE FROM products WHERE id = %s", (product_id,))
+            deleted = cursor.rowcount
+        conn.commit()
+    finally:
+        conn.close()
+
+    if deleted > 0:
+        return {"message": "상품 삭제 성공"}
+
+    # DB에 없으면 JSON에서 삭제
     sections = db_data.get("sections", {})
     for section_key, items in sections.items():
         original_len = len(items)
@@ -101,6 +167,47 @@ def delete_product(product_id: str):
         if len(sections[section_key]) < original_len:
             save_data()
             return {"message": "상품 삭제 성공"}
+
+    raise HTTPException(status_code=404, detail="상품을 찾을 수 없습니다.")
+
+@app.put("/api/products/{product_id}")
+def update_product(product_id: str, data: dict):
+    # DB에서 먼저 시도
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                "UPDATE products SET name=%s, price=%s, category=%s WHERE id=%s",
+                (data.get("name"), int(data.get("price", 0)), data.get("category"), product_id)
+            )
+            if cursor.rowcount > 0:
+                conn.commit()
+                return {"message": "상품이 수정되었습니다."}
+    finally:
+        conn.close()
+
+    # DB에 없으면 JSON에서 수정 (기존 로직 유지)
+    sections = db_data.get("sections", {})
+    for section_key, items in sections.items():
+        for i, item in enumerate(items):
+            if item.get("id") == product_id:
+                if "name" in data:
+                    item["name"] = data["name"]
+                if "price" in data:
+                    item["price"] = data["price"]
+                if "category" in data:
+                    section_map = {
+                        "featured": "featured", "new": "newItems",
+                        "collection": "collection", "mug": "mug",
+                        "plate": "plate", "tableware": "tableware"
+                    }
+                    new_section = section_map.get(data["category"], "featured")
+                    if section_key != new_section:
+                        sections[section_key].pop(i)
+                        sections[new_section].append(item)
+                save_data()
+                return {"message": "상품이 수정되었습니다."}
+
     raise HTTPException(status_code=404, detail="상품을 찾을 수 없습니다.")
 
 # --- 주문 및 장바구니 API ---
@@ -397,3 +504,58 @@ def get_product_image(product_id: str):
             if pid == product_id:
                 return FileResponse(item.get("image", ""))
     raise HTTPException(status_code=404, detail="이미지 없음")
+
+@app.post("/api/analyze-image")
+async def analyze_image(file: UploadFile = File(...)):
+    filename = file.filename
+    save_path = f"img/{filename}"
+    with open(save_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    with open(save_path, "rb") as f:
+        image_data = base64.b64encode(f.read()).decode("utf-8")
+
+    ext = filename.split(".")[-1].lower()
+    mime = "image/png" if ext == "png" else "image/jpeg"
+
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": f"data:{mime};base64,{image_data}"}
+                    },
+                    {
+                        "type": "text",
+                        "text": """이 상품 이미지를 분석하여 아래 JSON 형식으로만 응답하세요. 다른 텍스트는 절대 포함하지 마세요.
+{
+  "name": "상품명 (한국어, 구체적으로)",
+  "category": "featured 또는 new 또는 collection 또는 mug 또는 plate 또는 tableware 중 하나",
+  "price": 숫자만 (원화 기준 예상 가격),
+  "description": "상품 설명 한 줄"
+}
+카테고리 기준: mug(컵), plate(접시), tableware(식기세트/볼), collection(특별컬렉션), new(신상품), featured(베스트)"""
+                    }
+                ]
+            }
+        ],
+        max_tokens=300
+    )
+
+    raw = response.choices[0].message.content.strip()
+    try:
+        import json as json_module
+        clean = raw.replace("```json", "").replace("```", "").strip()
+        parsed = json_module.loads(clean)
+        validated = validate_gpt_result(parsed)
+        return {
+            **validated,
+            "image": f"img/{filename}"
+}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"이미지 분석 실패: {str(e)}")
