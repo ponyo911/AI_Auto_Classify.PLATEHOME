@@ -283,7 +283,103 @@ uvicorn main:app --reload
 
 ---
 
-## 📎 
+## 📎 프로젝트 SLIDE
+<img width="2560" height="1440" alt="슬라이드1" src="https://github.com/user-attachments/assets/07eb01bf-204d-448b-9b1c-81b72d1f1a27" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드2" src="https://github.com/user-attachments/assets/7d841796-3b2f-40a7-bab6-9088f7e75f6f" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드3" src="https://github.com/user-attachments/assets/59522d57-4227-4fb7-aac5-80cd58addeda" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드4" src="https://github.com/user-attachments/assets/54eb990b-ce07-497a-9565-eee30181c0d3" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드5" src="https://github.com/user-attachments/assets/08c7870e-15de-42f7-9930-5bff08dcde10" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드6" src="https://github.com/user-attachments/assets/81c2da69-a66d-4f1a-9dea-e148b391b3d2" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드8" src="https://github.com/user-attachments/assets/f5c898ec-aa91-45e8-9299-8dacfe5e1e05" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드9" src="https://github.com/user-attachments/assets/0790e221-39e0-4aac-82e9-88eee33a8427" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드10" src="https://github.com/user-attachments/assets/fe160685-9a1c-47a3-9b3d-8c2c0a9e0c24" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드11" src="https://github.com/user-attachments/assets/53c869d8-3aba-4c90-b8d9-66ccbe4127e4" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드12" src="https://github.com/user-attachments/assets/55f923d4-467a-43d7-a304-a1a87137c367" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드13" src="https://github.com/user-attachments/assets/4b88f123-b4e9-444e-83cb-c557ac6ee23f" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드14" src="https://github.com/user-attachments/assets/89ec9bea-0b02-4d14-831a-596980e37dd1" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드15" src="https://github.com/user-attachments/assets/2f6a2287-2c0b-48d0-8fcc-2ec6e81643a9" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드17" src="https://github.com/user-attachments/assets/d702e4fe-7c19-406d-935a-08ff62f95331" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드18" src="https://github.com/user-attachments/assets/747442e2-c243-4c65-8a9d-f96ce7b760f5" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드19" src="https://github.com/user-attachments/assets/dc1a0908-54fa-4b2c-908f-b5e27297ea5a" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드20" src="https://github.com/user-attachments/assets/844440a5-ee43-45a9-b205-5401f7fd9377" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드21" src="https://github.com/user-attachments/assets/ec460717-32a4-4ecb-a8f8-87fd494f7505" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드22" src="https://github.com/user-attachments/assets/16e22dda-6a0d-423d-b5ab-b1feacf21b5f" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드23" src="https://github.com/user-attachments/assets/86782d94-c85f-46e3-bbcf-7b92e91b991a" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드24" src="https://github.com/user-attachments/assets/bcf4fb75-ab24-4473-91c7-fc1e038f9b0e" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드25" src="https://github.com/user-attachments/assets/95aa1741-a1a6-4153-8f9f-7b4a7d18fd66" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드26" src="https://github.com/user-attachments/assets/a29e5630-9aa4-4382-b779-dc64412348a0" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드27" src="https://github.com/user-attachments/assets/dd35fa5f-86a9-4cd0-b836-f4db3b22fe3f" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드28" src="https://github.com/user-attachments/assets/1a5d8bb1-aaf1-4345-8fe9-62150e0d0332" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드29" src="https://github.com/user-attachments/assets/bb5d7cfe-ae12-4437-a80d-ad7b8a4b24ec" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드30" src="https://github.com/user-attachments/assets/7fcc310e-448d-4cf8-ad73-98f986287b5b" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드31" src="https://github.com/user-attachments/assets/3a49c323-a084-4eeb-be05-1fa459afd908" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드32" src="https://github.com/user-attachments/assets/b09c0cb1-f058-44ec-a28a-cd2200262e81" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드33" src="https://github.com/user-attachments/assets/ebee9d49-5714-489d-8ebf-6ca38f96741a" />
+<br>
+<br>
+<img width="2560" height="1440" alt="슬라이드34" src="https://github.com/user-attachments/assets/8558f646-ce63-4d8d-aa31-aa66b9f578d2" />
+<br>
+<br>
 
 
 
