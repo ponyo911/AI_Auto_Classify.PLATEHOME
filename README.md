@@ -1,4 +1,4 @@
-# 🍽️ AI_AUTO_CLASSIFY | PLATE & HOME
+## 🍽️ AI_AUTO_CLASSIFY | PLATE & HOME ##
 
 > 풀스택 쇼핑몰 프로젝트 | FastAPI + MySQL + OpenAI RAG +  AI 챗봇 + AI 상품 분류 및 매칭 시스템
 
@@ -85,32 +85,55 @@ auto-classify-plate-home/
 - 회원가입 (bcrypt 비밀번호 암호화)
 - 로그인 / 로그아웃 (localStorage 상태 유지)
 - 비회원 접근 시 장바구니 → 로그인 페이지 강제 이동
+<img width="1850" height="1040" alt="로그인" src="https://github.com/user-attachments/assets/d40228f9-d7d8-41c9-8d19-5118091ce998" />
+<br>
+<br>
+<img width="1850" height="1040" alt="회원가입" src="https://github.com/user-attachments/assets/7e9a7df3-7977-481b-ad1d-439b1d69ef5b" />
+<br>
 
 ### 🛒 장바구니 & 주문
 - 상품 담기 / 수량 변경 / 삭제
 - 주문 생성 및 주문 내역 조회
 - MySQL orders / order_items 테이블 연동
+<img width="1850" height="1040" alt="장바구니" src="https://github.com/user-attachments/assets/7ba20410-69cc-4af5-98d5-2b679061f052" />
+<br>
+<br>
+<img width="1850" height="1040" alt="상품구매" src="https://github.com/user-attachments/assets/6a76cc48-9690-4dd1-90c3-c0e925cdb5ea" />
 
-### 🤖 AI 자동 분류 시스템 (핵심)
-- 이미지 업로드 → GPT-4o-mini Vision 분석
-- 상품명 / 카테고리 / 가격 자동 생성
-- category.py 검증 후 MySQL products 테이블에 저장
-- 등록된 상품이 메인 페이지 해당 섹션에 자동 반영
-
-### 🔍 상품 검색
-- 키워드 입력 시 전체 상품 대상 실시간 필터링
-- 검색어 없으면 전체 목록 표시 / 초기화 버튼 제공
+<br>
 
 ### 🛠️ 관리자 페이지
 - 주문 관리 — 전체 주문 내역 조회 및 상태 관리
 - 상품 관리 — 전체 상품 목록 조회 / 수정 / 삭제
 - 회원 관리 — 가입 회원 목록 조회
 - AI 자동 분류 — 이미지 업로드로 상품 자동 등록
+<img width="1850" height="1040" alt="관리자모드" src="https://github.com/user-attachments/assets/3c64389a-102e-4496-96f7-2fdbed77c5e2" />
+
+<br>
+
+### 🤖 AI 자동 분류 시스템 (핵심)
+- 이미지 업로드 → GPT-4o-mini Vision 분석
+- 상품명 / 카테고리 / 가격 자동 생성
+- category.py 검증 후 MySQL products 테이블에 저장
+<img width="1850" height="1040" alt="자동화" src="https://github.com/user-attachments/assets/f1333ef0-c1ed-4cd4-82db-8f357282e3e2" />
+<br>
+
+### 🔍 상품 검색
+- 키워드 입력 시 전체 상품 대상 실시간 필터링
+- 검색어 없으면 전체 목록 표시 / 초기화 버튼 제공
+<img width="1850" height="1040" alt="검색" src="https://github.com/user-attachments/assets/c105a381-af1b-4ce8-b52f-72f0ca03cf0f" />
+<br>
 
 ### 💬 AI 챗봇
 - rag_docs 기반 문서 학습
 - 상품 질문 응답 및 추천 기능
 - 전체화면 전환 지원
+<img width="1850" height="1040" alt="챗봇_1" src="https://github.com/user-attachments/assets/390cea81-d2a6-40b8-852a-fcd5663e078d" />
+<br>
+<br>
+<img width="1850" height="1040" alt="챗봇 전체화면" src="https://github.com/user-attachments/assets/414306be-ef14-4891-9b13-296722be29f7" />
+
+
 
 <br>
 
@@ -260,43 +283,8 @@ uvicorn main:app --reload
 
 ---
 
-## 📎 발표 자료
+## 📎 
 
-> PPT 슬라이드 이미지는 아래와 같이 추가하세요.
 
-```markdown
-![slide1](slides/slide_01.png)
-![slide2](slides/slide_02.png)
-...
-```
-
-또는 PDF 파일을 레포에 포함 후 링크 연결:
-
-```markdown
-[📄 프로젝트 발표 자료 (PDF)](PLATE_HOME.pdf)
-```
-
-<br>
 
 ---
-
-## 🎥 기능 시연
-
-> GIF 파일 준비 후 아래 형식으로 교체하세요.
-
-| 기능 | 시연 |
-|---|---|
-| AI 자동 상품 분류 | ![ai-classify](gif/ai_classify.gif) |
-| 장바구니 & 주문 | ![cart](gif/cart_order.gif) |
-| AI 챗봇 | ![chatbot](gif/chatbot.gif) |
-| 관리자 페이지 | ![admin](gif/admin.gif) |
-
-<br>
-
----
-
-## 👨‍💻 개발자
-
-| 이름 | GitHub |
-|---|---|
-| ponyo911 | https://github.com/ponyo911 |
